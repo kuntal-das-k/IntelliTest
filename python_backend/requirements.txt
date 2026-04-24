@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-reportlab
-pydantic
-python-multipart
-cors

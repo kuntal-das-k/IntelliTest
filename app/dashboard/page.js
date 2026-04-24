@@ -8,6 +8,7 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import Navbar from "@/components/Navbar";
 import UpgradeModal from "@/components/UpgradeModal";
+import RedeemCoupon from "@/components/RedeemCoupon";
 
 export default function DashboardPage() {
   const { user, userData, loading } = useAuth();
@@ -117,6 +118,31 @@ export default function DashboardPage() {
               {papers.length}
             </div>
             <div style={{ fontSize: 13, color: "#6B7280" }}>Total papers created</div>
+          </div>
+        </div>
+
+        {/* Redeem Coupon */}
+        <div
+          className="card"
+          style={{
+            padding: "20px 24px",
+            marginBottom: 24,
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ flex: "0 0 auto" }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#1E1B4B", marginBottom: 2 }}>
+              🎟️ Redeem Coupon
+            </div>
+            <div style={{ fontSize: 12, color: "#6B7280" }}>
+              Enter your code to add credits or activate a plan
+            </div>
+          </div>
+          <div style={{ flex: 1, minWidth: 250 }}>
+            <RedeemCoupon compact />
           </div>
         </div>
 

@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import PricingCards from "./PricingCards";
+import RedeemCoupon from "./RedeemCoupon";
 
 export default function UpgradeModal({ isOpen, onClose }) {
+  const [showRedeem, setShowRedeem] = useState(false);
+
   if (!isOpen) return null;
 
   return (
@@ -75,6 +79,39 @@ export default function UpgradeModal({ isOpen, onClose }) {
           <p style={{ color: "#6B7280", fontSize: 15 }}>
             Upgrade your plan to continue generating exam papers.
           </p>
+        </div>
+
+        {/* Quick Redeem Section */}
+        <div
+          style={{
+            maxWidth: 480,
+            margin: "0 auto 32px",
+            padding: "20px 24px",
+            background: "#F0EEFF",
+            borderRadius: 16,
+            border: "1px solid #E0DBFF",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: showRedeem ? 16 : 0,
+              cursor: "pointer",
+            }}
+            onClick={() => setShowRedeem(!showRedeem)}
+          >
+            <span style={{ fontSize: 14, fontWeight: 600, color: "#5B4FCF" }}>
+              🎟️ Have a coupon code?
+            </span>
+            <span style={{ fontSize: 18, color: "#5B4FCF", transition: "transform 0.2s", transform: showRedeem ? "rotate(180deg)" : "rotate(0)" }}>
+              ▾
+            </span>
+          </div>
+          {showRedeem && (
+            <RedeemCoupon compact onSuccess={() => setTimeout(onClose, 1500)} />
+          )}
         </div>
 
         <PricingCards />

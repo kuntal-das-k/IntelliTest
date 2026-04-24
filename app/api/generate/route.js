@@ -1,6 +1,89 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
+// Fallback model chain — each model has its own quota pool
+const MODEL_CHAIN = [
+  "gemini-2.5-flash",
+  "gemini-2.0-flash-lite",
+  "gemini-2.5-flash-lite",
+  "gemini-flash-lite-latest",
+];
+
+const MAX_RETRIES = 3;
+const RETRY_BASE_DELAY_MS = 2000;
+const REQUEST_TIMEOUT_MS = 60000; // 60 seconds
+
+async function generateWithRetry(genAI, systemInstruction, userPrompt) {
+  let lastError = null;
+
+  for (const modelName of MODEL_CHAIN) {
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: systemInstruction,
+          generationConfig: {
+            responseMimeType: "application/json",
+          },
+        });
+
+        // Use AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+        try {
+          const result = await model.generateContent({
+            contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+          }, { signal: controller.signal });
+
+          clearTimeout(timeoutId);
+
+          const response = await result.response;
+          let text = response.text();
+
+          // Clean up response — remove any markdown formatting
+          text = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+
+          // Parse and validate JSON
+          const paperData = JSON.parse(text);
+
+          // Basic validation
+          if (!paperData.header || !paperData.sections || !Array.isArray(paperData.sections)) {
+            throw new Error("Invalid paper structure: missing header or sections");
+          }
+
+          console.log(`✅ Successfully generated with ${modelName} (attempt ${attempt})`);
+          return paperData;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      } catch (error) {
+        lastError = error;
+        const isOverloaded = error.message?.includes("503") || error.message?.includes("overloaded") || error.message?.includes("high demand");
+        const isTimeout = error.name === "AbortError";
+        const isRetryable = isOverloaded || isTimeout || error.message?.includes("500");
+
+        console.warn(
+          `⚠️ ${modelName} attempt ${attempt}/${MAX_RETRIES} failed: ${isOverloaded ? "503 overloaded" : isTimeout ? "timeout" : error.message?.substring(0, 100)}`
+        );
+
+        if (isRetryable && attempt < MAX_RETRIES) {
+          const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1);
+          console.log(`   Retrying in ${delay}ms...`);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          continue;
+        }
+
+        // If not retryable or exhausted retries, try next model
+        break;
+      }
+    }
+    console.log(`🔄 Switching from ${modelName} to next fallback model...`);
+  }
+
+  throw lastError || new Error("All models failed to generate content");
+}
+
 export async function POST(request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -71,6 +154,11 @@ Return ONLY a valid JSON object with this structure:
   ]
 }`;
 
+    const isBengaliBoard = ["WBBSE", "WBCHSE", "WBJEE"].includes(board);
+    const languageInstruction = isBengaliBoard 
+      ? "10. The questions, options, answers, and solutions MUST be written entirely in the Bengali language (বাংলা), except for mathematical symbols, numbers, and standard English terms where necessary." 
+      : "10. The questions should be written in English.";
+
     const userPrompt = `Generate an exam paper with these specifications:
 - Board: ${board}
 - Class: ${className}
@@ -92,44 +180,31 @@ Make sure:
 7. Total marks should add up to approximately ${totalMarks}.
 8. All math expressions should use Unicode symbols (×, ÷, √, π, ², ³, ∑, ∫, θ, α, β, etc.). Do NOT use LaTeX.
 9. Questions should be of ${difficulty} difficulty level.
+${languageInstruction}
 
 Return ONLY valid JSON. No markdown, no code blocks, just the JSON object.`;
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: systemInstruction,
-      generationConfig: {
-        responseMimeType: "application/json",
-      },
-    });
 
-    const result = await model.generateContent(userPrompt);
-    const response = await result.response;
-    let text = response.text();
-
-    // Clean up response — remove any markdown formatting
-    text = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-
-    // Parse JSON
-    let paperData;
-    try {
-      console.log("Raw Gemini Text:", text);
-      paperData = JSON.parse(text);
-    } catch (parseError) {
-      console.error("Failed to parse Gemini response:", text);
-      return NextResponse.json(
-        { error: "Failed to parse AI response. Please try again." },
-        { status: 500 }
-      );
-    }
+    const paperData = await generateWithRetry(genAI, systemInstruction, userPrompt);
 
     return NextResponse.json({ paper: paperData });
   } catch (error) {
     console.error("Gemini API error:", error);
+
+    // Provide user-friendly error messages
+    let userMessage = "Failed to generate paper. Please try again.";
+    if (error.message?.includes("503") || error.message?.includes("high demand")) {
+      userMessage = "AI models are currently experiencing high demand. Please wait a minute and try again.";
+    } else if (error.name === "AbortError" || error.message?.includes("timeout")) {
+      userMessage = "Request timed out. The AI is taking too long. Please try again.";
+    } else if (error.message?.includes("API key")) {
+      userMessage = "API key is invalid or expired. Please check your configuration.";
+    }
+
     return NextResponse.json(
-      { error: error.message || "Failed to generate paper. Please try again." },
-      { status: 500 }
+      { error: userMessage },
+      { status: 503 }
     );
   }
 }
