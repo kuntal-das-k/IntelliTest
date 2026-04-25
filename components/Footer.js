@@ -91,6 +91,10 @@ export default function Footer() {
             Built for teachers in West Bengal, India.
             <br />
             Questions? Reach out to us.
+            <br />
+            <a href="mailto:info.intellitest@gmail.com" style={{ color: "#8B5CF6", textDecoration: "none", marginTop: 8, display: "inline-block" }}>
+              info.intellitest@gmail.com
+            </a>
           </p>
         </div>
       </div>
