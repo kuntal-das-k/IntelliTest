@@ -71,6 +71,13 @@ export default function GeneratePage() {
       return;
     }
 
+    // Validate that questions per type is filled for each selected question type
+    const missingQuestionCount = formData.questionTypes.some(type => !formData.questionsPerType[type] || formData.questionsPerType[type] <= 0);
+    if (missingQuestionCount) {
+      setError("Please specify the number of questions for each selected question type.");
+      return;
+    }
+
     setGenerating(true);
 
     try {
@@ -185,22 +192,22 @@ export default function GeneratePage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
                 {QUESTION_TYPES.map((type) => (
                   <button
-                    key={type}
+                    key={type.id}
                     type="button"
-                    onClick={() => handleTypeToggle(type)}
+                    onClick={() => handleTypeToggle(type.value)}
                     style={{
                       padding: "10px 12px",
                       borderRadius: 8,
-                      border: formData.questionTypes.includes(type) ? "2px solid #5B4FCF" : "2px solid #E5E7EB",
-                      background: formData.questionTypes.includes(type) ? "#5B4FCF" : "white",
-                      color: formData.questionTypes.includes(type) ? "white" : "#374151",
+                      border: formData.questionTypes.includes(type.value) ? "2px solid #5B4FCF" : "2px solid #E5E7EB",
+                      background: formData.questionTypes.includes(type.value) ? "#5B4FCF" : "white",
+                      color: formData.questionTypes.includes(type.value) ? "white" : "#374151",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",
                       transition: "all 0.2s",
                     }}
                   >
-                    {type}
+                    {type.label}
                   </button>
                 ))}
               </div>
