@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { setCorsHeaders, handleCorsPreflight } from "@/lib/cors";
 
 // Fallback model chain — each model has its own quota pool
 const MODEL_CHAIN = [
@@ -44,8 +45,16 @@ async function generateWithRetry(genAI, systemInstruction, userPrompt) {
           // Clean up response — remove any markdown formatting
           text = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 
+          // Try to extract valid JSON from response (in case AI adds extra text)
+          let jsonText = text;
+          const jsonStart = text.indexOf('{');
+          const jsonEnd = text.lastIndexOf('}');
+          if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+            jsonText = text.substring(jsonStart, jsonEnd + 1);
+          }
+
           // Parse and validate JSON
-          const paperData = JSON.parse(text);
+          const paperData = JSON.parse(jsonText);
 
           // Basic validation
           if (!paperData.header || !paperData.sections || !Array.isArray(paperData.sections)) {
@@ -82,6 +91,10 @@ async function generateWithRetry(genAI, systemInstruction, userPrompt) {
   }
 
   throw lastError || new Error("All models failed to generate content");
+}
+
+export async function OPTIONS() {
+  return handleCorsPreflight();
 }
 
 export async function POST(request) {
@@ -179,7 +192,8 @@ Make sure:
 6. Proof-based questions should be worth 5-8 marks each.
 7. Total marks should add up to approximately ${totalMarks}.
 8. All math expressions should use Unicode symbols (×, ÷, √, π, ², ³, ∑, ∫, θ, α, β, etc.). Do NOT use LaTeX.
-9. Questions should be of ${difficulty} difficulty level.
+9. For vector notation, use bold lowercase letters (a, b, c) or indicate vectors clearly. Do not use arrow notation as it may not render properly.
+10. Questions should be of ${difficulty} difficulty level.
 ${languageInstruction}
 
 Return ONLY valid JSON. No markdown, no code blocks, just the JSON object.`;
@@ -188,7 +202,7 @@ Return ONLY valid JSON. No markdown, no code blocks, just the JSON object.`;
 
     const paperData = await generateWithRetry(genAI, systemInstruction, userPrompt);
 
-    return NextResponse.json({ paper: paperData });
+    return setCorsHeaders(NextResponse.json({ paper: paperData }));
   } catch (error) {
     console.error("Gemini API error:", error);
 
@@ -202,9 +216,11 @@ Return ONLY valid JSON. No markdown, no code blocks, just the JSON object.`;
       userMessage = "API key is invalid or expired. Please check your configuration.";
     }
 
-    return NextResponse.json(
-      { error: userMessage },
-      { status: 503 }
+    return setCorsHeaders(
+      NextResponse.json(
+        { error: userMessage },
+        { status: 503 }
+      )
     );
   }
 }

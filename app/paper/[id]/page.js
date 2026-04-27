@@ -495,7 +495,9 @@ export default function PaperViewPage({ params }) {
               Time allowed
             </div>
             <div style={S.metaRight}>
-              <span style={S.metaVal}>Date: ___/___/____</span>
+              <span style={S.metaVal}>
+                Date: {paper.formData?.date ? new Date(paper.formData.date).toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '___/___/____'}
+              </span>
               Roll No: ____________
             </div>
           </div>

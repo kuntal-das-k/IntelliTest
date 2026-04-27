@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { setCorsHeaders, handleCorsPreflight } from "@/lib/cors";
 
 const MODEL_CHAIN = [
   "gemini-2.5-flash",
@@ -37,7 +38,15 @@ async function regenerateWithRetry(genAI, prompt) {
           let text = response.text();
           text = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 
-          const newQuestion = JSON.parse(text);
+          // Try to extract valid JSON from response (in case AI adds extra text)
+          let jsonText = text;
+          const jsonStart = text.indexOf('{');
+          const jsonEnd = text.lastIndexOf('}');
+          if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+            jsonText = text.substring(jsonStart, jsonEnd + 1);
+          }
+
+          const newQuestion = JSON.parse(jsonText);
 
           // Validate question structure
           if (!newQuestion.question) {
@@ -73,13 +82,19 @@ async function regenerateWithRetry(genAI, prompt) {
   throw lastError || new Error("All models failed");
 }
 
+export async function OPTIONS() {
+  return handleCorsPreflight();
+}
+
 export async function POST(request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "Gemini API key not configured." },
-        { status: 500 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "Gemini API key not configured." },
+          { status: 500 }
+        )
       );
     }
 
@@ -104,6 +119,7 @@ Return ONLY a valid JSON object:
 Notes:
 - If type is not MCQ, do NOT include options array.
 - Use Unicode math symbols, not LaTeX.
+- For vector notation, use bold lowercase letters (a, b, c) or indicate vectors clearly. Do not use arrow notation as it may not render properly.
 ${languageInstruction}
 - Return ONLY valid JSON, no markdown.`;
 
@@ -111,7 +127,7 @@ ${languageInstruction}
 
     const newQuestion = await regenerateWithRetry(genAI, prompt);
 
-    return NextResponse.json({ question: newQuestion });
+    return setCorsHeaders(NextResponse.json({ question: newQuestion }));
   } catch (error) {
     console.error("Regenerate error:", error);
 
@@ -120,9 +136,11 @@ ${languageInstruction}
       userMessage = "AI models are busy. Please wait a moment and try again.";
     }
 
-    return NextResponse.json(
-      { error: userMessage },
-      { status: 503 }
+    return setCorsHeaders(
+      NextResponse.json(
+        { error: userMessage },
+        { status: 503 }
+      )
     );
   }
 }

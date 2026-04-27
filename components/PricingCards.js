@@ -3,7 +3,7 @@
 import { useState } from "react";
 import RedeemCoupon from "./RedeemCoupon";
 
-const UPI_ID = "daskuntal688@okaxis";
+const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "daskuntal688@okaxis";
 
 const plans = [
   {

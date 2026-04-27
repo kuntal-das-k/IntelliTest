@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, updateDoc, arrayUnion, increment } from "firebase/firestore";
+import { setCorsHeaders, handleCorsPreflight } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleCorsPreflight();
+}
 
 export async function POST(request) {
   try {
@@ -8,9 +13,11 @@ export async function POST(request) {
     const { code, userId } = body;
 
     if (!code || !userId) {
-      return NextResponse.json(
-        { error: "Missing coupon code or user ID." },
-        { status: 400 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "Missing coupon code or user ID." },
+          { status: 400 }
+        )
       );
     }
 
@@ -21,9 +28,11 @@ export async function POST(request) {
     const couponSnap = await getDoc(couponRef);
 
     if (!couponSnap.exists()) {
-      return NextResponse.json(
-        { error: "Invalid coupon code. Please check and try again." },
-        { status: 404 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "Invalid coupon code. Please check and try again." },
+          { status: 404 }
+        )
       );
     }
 
@@ -31,26 +40,32 @@ export async function POST(request) {
 
     // Check if coupon is active
     if (!coupon.active) {
-      return NextResponse.json(
-        { error: "This coupon has expired or been deactivated." },
-        { status: 400 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "This coupon has expired or been deactivated." },
+          { status: 400 }
+        )
       );
     }
 
     // Check max uses
     const usedBy = coupon.usedBy || [];
     if (coupon.maxUses && usedBy.length >= coupon.maxUses) {
-      return NextResponse.json(
-        { error: "This coupon has already been fully redeemed." },
-        { status: 400 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "This coupon has already been fully redeemed." },
+          { status: 400 }
+        )
       );
     }
 
     // Check if this user already used this coupon
     if (usedBy.includes(userId)) {
-      return NextResponse.json(
-        { error: "You have already redeemed this coupon." },
-        { status: 400 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "You have already redeemed this coupon." },
+          { status: 400 }
+        )
       );
     }
 
@@ -59,9 +74,11 @@ export async function POST(request) {
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      return NextResponse.json(
-        { error: "User not found." },
-        { status: 404 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "User not found." },
+          { status: 404 }
+        )
       );
     }
 
@@ -81,9 +98,11 @@ export async function POST(request) {
       updateData.planExpiry = expiry.toISOString();
       successMessage = `🎉 Unlimited plan activated for ${planDays} days!`;
     } else {
-      return NextResponse.json(
-        { error: "Invalid coupon type." },
-        { status: 400 }
+      return setCorsHeaders(
+        NextResponse.json(
+          { error: "Invalid coupon type." },
+          { status: 400 }
+        )
       );
     }
 
@@ -95,18 +114,22 @@ export async function POST(request) {
       usedBy: arrayUnion(userId),
     });
 
-    return NextResponse.json({
-      success: true,
-      message: successMessage,
-      type: coupon.type,
-      creditsAdded: coupon.type === "credits" ? coupon.creditsToAdd : undefined,
-      planDays: coupon.type === "unlimited" ? coupon.planDays : undefined,
-    });
+    return setCorsHeaders(
+      NextResponse.json({
+        success: true,
+        message: successMessage,
+        type: coupon.type,
+        creditsAdded: coupon.type === "credits" ? coupon.creditsToAdd : undefined,
+        planDays: coupon.type === "unlimited" ? coupon.planDays : undefined,
+      })
+    );
   } catch (error) {
     console.error("Redeem error:", error);
-    return NextResponse.json(
-      { error: "Something went wrong. Please try again." },
-      { status: 500 }
+    return setCorsHeaders(
+      NextResponse.json(
+        { error: "Something went wrong. Please try again." },
+        { status: 500 }
+      )
     );
   }
 }

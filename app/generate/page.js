@@ -20,7 +20,7 @@ export default function GeneratePage() {
     questionTypes: [],
     questionsPerType: {},
     difficulty: "Medium",
-    totalMarks: 50,
+    totalMarks: "",
     duration: "2 hours",
     schoolName: "",
     date: "",
@@ -42,7 +42,7 @@ export default function GeneratePage() {
       : [...formData.questionTypes, type];
     const qpt = { ...formData.questionsPerType };
     if (types.includes(type)) {
-      if (!qpt[type]) qpt[type] = 3;
+      if (!qpt[type]) qpt[type] = "";
     } else {
       delete qpt[type];
     }
@@ -198,7 +198,47 @@ export default function GeneratePage() {
                   {formData.questionTypes.map((type) => (
                     <div key={type}>
                       <label style={{ fontSize: 13, color: "#6B7280", marginBottom: 4, display: "block" }}>{type}</label>
-                      <input type="number" className="input-field" min={1} max={20} value={formData.questionsPerType[type] || 3} onChange={(e) => setFormData({ ...formData, questionsPerType: { ...formData.questionsPerType, [type]: parseInt(e.target.value) || 1 } })} />
+                      <input
+                        type="number"
+                        className="input-field"
+                        min={1}
+                        max={20}
+                        placeholder="e.g., 3, 5, 10"
+                        value={formData.questionsPerType[type] || ""}
+                        onChange={(e) => setFormData({ ...formData, questionsPerType: { ...formData.questionsPerType, [type]: parseInt(e.target.value) || "" } })}
+                      />
+                      <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                        {[3, 5, 10].map((num) => (
+                          <button
+                            key={num}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, questionsPerType: { ...formData.questionsPerType, [type]: num } })}
+                            style={{
+                              padding: "4px 10px",
+                              borderRadius: 6,
+                              border: "1px solid #E5E7EB",
+                              background: formData.questionsPerType[type] === num ? "#5B4FCF" : "white",
+                              color: formData.questionsPerType[type] === num ? "white" : "#6B7280",
+                              fontSize: 12,
+                              fontWeight: 500,
+                              cursor: "pointer",
+                              transition: "all 0.2s",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (formData.questionsPerType[type] !== num) {
+                                e.currentTarget.style.borderColor = "#5B4FCF";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (formData.questionsPerType[type] !== num) {
+                                e.currentTarget.style.borderColor = "#E5E7EB";
+                              }
+                            }}
+                          >
+                            {num}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -217,7 +257,48 @@ export default function GeneratePage() {
             {/* Total Marks */}
             <div style={{ marginBottom: 20 }}>
               <label className="form-label">Total Marks *</label>
-              <input type="number" className="input-field" min={10} max={200} value={formData.totalMarks} onChange={(e) => setFormData({ ...formData, totalMarks: parseInt(e.target.value) || 50 })} required />
+              <input
+                type="number"
+                className="input-field"
+                min={10}
+                max={200}
+                placeholder="e.g., 50, 80, 100"
+                value={formData.totalMarks || ""}
+                onChange={(e) => setFormData({ ...formData, totalMarks: parseInt(e.target.value) || "" })}
+                required
+              />
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                {[50, 80, 100].map((marks) => (
+                  <button
+                    key={marks}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, totalMarks: marks })}
+                    style={{
+                      padding: "6px 12px",
+                      borderRadius: 8,
+                      border: "1px solid #E5E7EB",
+                      background: formData.totalMarks === marks ? "#5B4FCF" : "white",
+                      color: formData.totalMarks === marks ? "white" : "#6B7280",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (formData.totalMarks !== marks) {
+                        e.currentTarget.style.borderColor = "#5B4FCF";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (formData.totalMarks !== marks) {
+                        e.currentTarget.style.borderColor = "#E5E7EB";
+                      }
+                    }}
+                  >
+                    {marks}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Duration */}
