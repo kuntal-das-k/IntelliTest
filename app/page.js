@@ -12,7 +12,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="hero-bg" style={{ minHeight: "85vh", display: "flex", alignItems: "center", position: "relative" }}>
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 1200, margin: "0 auto", padding: "80px 24px", width: "100%" }}>
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 1200, margin: "0 auto", padding: "60px 20px 40px", width: "100%" }}>
           <div style={{ maxWidth: 700 }}>
             <div
               style={{
@@ -21,12 +21,12 @@ export default function HomePage() {
                 gap: 8,
                 background: "rgba(91,79,207,0.2)",
                 border: "1px solid rgba(91,79,207,0.3)",
-                padding: "6px 16px",
+                padding: "6px 14px",
                 borderRadius: 24,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 600,
                 color: "#A78BFA",
-                marginBottom: 24,
+                marginBottom: 20,
               }}
               className="animate-fade-in"
             >
@@ -34,7 +34,7 @@ export default function HomePage() {
             </div>
 
             <h1
-              style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, color: "white", lineHeight: 1.15, marginBottom: 20 }}
+              style={{ fontSize: "clamp(28px, 6vw, 56px)", fontWeight: 800, color: "white", lineHeight: 1.2, marginBottom: 16 }}
               className="animate-slide-up"
             >
               Generate Exam Papers{" "}
@@ -44,31 +44,31 @@ export default function HomePage() {
             </h1>
 
             <p
-              style={{ fontSize: "clamp(16px, 2vw, 19px)", color: "#9CA3AF", lineHeight: 1.7, marginBottom: 36, maxWidth: 560 }}
+              style={{ fontSize: "clamp(14px, 2.2vw, 19px)", color: "#9CA3AF", lineHeight: 1.6, marginBottom: 28, maxWidth: 560 }}
               className="animate-slide-up"
             >
-              IntelliTest helps math teachers in West Bengal create professional exam papers for WBBSE, WBCHSE, JEE, and WBJEE — powered by AI, ready to download as PDF.
+              IntelliTest helps math teachers in West Bengal create professional exam papers for WBBSE, WBCHSE, JEE, and WBJEE — powered by AI.
             </p>
 
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }} className="animate-slide-up">
-              <Link href="/login" className="btn-primary animate-pulse-glow" style={{ fontSize: 16, padding: "14px 32px" }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }} className="animate-slide-up">
+              <Link href="/login" className="btn-primary animate-pulse-glow" style={{ fontSize: 15, padding: "12px 24px", width: "100%", maxWidth: 200, justifyContent: "center" }}>
                 Try Free — 10 Credits →
               </Link>
-              <a href="#how-it-works" className="btn-secondary" style={{ borderColor: "rgba(255,255,255,0.2)", color: "white" }}>
+              <a href="#how-it-works" className="btn-secondary" style={{ borderColor: "rgba(255,255,255,0.2)", color: "white", padding: "12px 24px", width: "100%", maxWidth: 160, justifyContent: "center" }}>
                 How It Works
               </a>
             </div>
 
             {/* Stats */}
-            <div style={{ display: "flex", gap: 40, marginTop: 48, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 32, marginTop: 40, flexWrap: "wrap", justifyContent: "flex-start" }}>
               {[
                 { value: "5+", label: "Boards Supported" },
                 { value: "AI", label: "Powered Questions" },
                 { value: "PDF", label: "Instant Download" },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <div style={{ fontSize: 28, fontWeight: 800, color: "#A78BFA" }}>{stat.value}</div>
-                  <div style={{ fontSize: 13, color: "#6B7280", marginTop: 2 }}>{stat.label}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: "#A78BFA" }}>{stat.value}</div>
+                  <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -114,13 +114,13 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="section-alt" style={{ padding: "80px 24px" }}>
+      <section id="how-it-works" className="section-alt" style={{ padding: "60px 20px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 36px)", color: "#1E1B4B", marginBottom: 12 }}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 36px)", color: "#1E1B4B", marginBottom: 10 }}>
               How It Works
             </h2>
-            <p style={{ color: "#6B7280", fontSize: 16, maxWidth: 500, margin: "0 auto" }}>
+            <p style={{ color: "#6B7280", fontSize: 14, maxWidth: 400, margin: "0 auto", lineHeight: 1.5 }}>
               Three simple steps to generate a professional exam paper
             </p>
           </div>
@@ -128,8 +128,8 @@ export default function HomePage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: 32,
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: 24,
             }}
           >
             {[
@@ -137,19 +137,19 @@ export default function HomePage() {
                 step: "01",
                 icon: "📝",
                 title: "Fill the Form",
-                desc: "Select board, class, chapter, question types, difficulty, and total marks.",
+                desc: "Select board, class, chapter, question types, difficulty, and marks.",
               },
               {
                 step: "02",
                 icon: "🤖",
-                title: "AI Generates Questions",
+                title: "AI Generates",
                 desc: "Our AI creates board-appropriate, accurate math questions instantly.",
               },
               {
                 step: "03",
                 icon: "📄",
                 title: "Download PDF",
-                desc: "Preview the paper, regenerate any question, and download as professional PDF.",
+                desc: "Preview the paper, regenerate any question, and download as PDF.",
               },
             ].map((item, i) => (
               <div
@@ -157,7 +157,7 @@ export default function HomePage() {
                 className="card"
                 style={{
                   textAlign: "center",
-                  padding: 36,
+                  padding: 28,
                   position: "relative",
                   overflow: "hidden",
                 }}
@@ -167,18 +167,18 @@ export default function HomePage() {
                     position: "absolute",
                     top: -10,
                     right: -10,
-                    fontSize: 80,
+                    fontSize: 60,
                     fontWeight: 900,
                     color: "rgba(91,79,207,0.05)",
                   }}
                 >
                   {item.step}
                 </div>
-                <div style={{ fontSize: 48, marginBottom: 16 }}>{item.icon}</div>
-                <h3 style={{ fontWeight: 700, fontSize: 18, color: "#1E1B4B", marginBottom: 10 }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>{item.icon}</div>
+                <h3 style={{ fontWeight: 700, fontSize: 16, color: "#1E1B4B", marginBottom: 8 }}>
                   {item.title}
                 </h3>
-                <p style={{ color: "#6B7280", fontSize: 14, lineHeight: 1.7 }}>{item.desc}</p>
+                <p style={{ color: "#6B7280", fontSize: 13, lineHeight: 1.6 }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -186,16 +186,16 @@ export default function HomePage() {
       </section>
 
       {/* Boards Section */}
-      <section style={{ padding: "80px 24px", background: "white" }}>
+      <section style={{ padding: "60px 20px", background: "white" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 36px)", color: "#1E1B4B", marginBottom: 12 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 36px)", color: "#1E1B4B", marginBottom: 10 }}>
             All Major Boards Supported
           </h2>
-          <p style={{ color: "#6B7280", fontSize: 16, maxWidth: 500, margin: "0 auto 48px" }}>
+          <p style={{ color: "#6B7280", fontSize: 14, maxWidth: 400, margin: "0 auto 36px", lineHeight: 1.5 }}>
             Generate papers matching the exact pattern of each board
           </p>
 
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
             {[
               { name: "WBBSE", desc: "Class 6–10", color: "#5B4FCF" },
               { name: "WBCHSE", desc: "Class 11–12", color: "#7C3AED" },
@@ -206,17 +206,18 @@ export default function HomePage() {
               <div
                 key={board.name}
                 style={{
-                  padding: "20px 32px",
-                  borderRadius: 16,
+                  padding: "16px 24px",
+                  borderRadius: 12,
                   border: `2px solid ${board.color}20`,
                   background: `${board.color}08`,
                   transition: "all 0.3s ease",
                   cursor: "default",
-                  minWidth: 160,
+                  minWidth: 140,
+                  flex: "1 1 140px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = board.color;
-                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
                   e.currentTarget.style.boxShadow = `0 8px 24px ${board.color}20`;
                 }}
                 onMouseLeave={(e) => {
@@ -225,8 +226,8 @@ export default function HomePage() {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <div style={{ fontWeight: 700, fontSize: 18, color: board.color }}>{board.name}</div>
-                <div style={{ fontSize: 13, color: "#6B7280", marginTop: 4 }}>{board.desc}</div>
+                <div style={{ fontWeight: 700, fontSize: 16, color: board.color }}>{board.name}</div>
+                <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{board.desc}</div>
               </div>
             ))}
           </div>
@@ -234,13 +235,13 @@ export default function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="section-alt" style={{ padding: "80px 24px" }}>
+      <section id="pricing" className="section-alt" style={{ padding: "60px 20px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 36px)", color: "#1E1B4B", marginBottom: 12 }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 36px)", color: "#1E1B4B", marginBottom: 10 }}>
               Simple, Fair Pricing
             </h2>
-            <p style={{ color: "#6B7280", fontSize: 16, maxWidth: 500, margin: "0 auto" }}>
+            <p style={{ color: "#6B7280", fontSize: 14, maxWidth: 400, margin: "0 auto", lineHeight: 1.5 }}>
               Start free with 10 credits. Upgrade only when you need more.
             </p>
           </div>
@@ -252,19 +253,19 @@ export default function HomePage() {
       {/* CTA Section */}
       <section
         style={{
-          padding: "80px 24px",
+          padding: "60px 20px",
           background: "linear-gradient(135deg, #5B4FCF, #7C3AED)",
           textAlign: "center",
         }}
       >
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(24px, 3vw, 32px)", color: "white", marginBottom: 16 }}>
+          <h2 style={{ fontWeight: 800, fontSize: "clamp(22px, 4vw, 32px)", color: "white", marginBottom: 12 }}>
             Ready to Save Hours of Work?
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 16, marginBottom: 32 }}>
+          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, marginBottom: 24, lineHeight: 1.5 }}>
             Join hundreds of teachers who generate exam papers in minutes, not hours.
           </p>
-          <Link href="/login" className="btn-primary" style={{ background: "white", color: "#5B4FCF", fontSize: 16, padding: "14px 36px" }}>
+          <Link href="/login" className="btn-primary" style={{ background: "white", color: "#5B4FCF", fontSize: 15, padding: "12px 28px", width: "100%", maxWidth: 200, justifyContent: "center" }}>
             Start for Free →
           </Link>
         </div>

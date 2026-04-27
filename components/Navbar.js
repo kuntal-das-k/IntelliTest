@@ -32,32 +32,32 @@ export default function Navbar() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "0 24px",
-          height: 64,
+          padding: "0 16px",
+          height: 56,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
         }}
       >
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
+              width: 32,
+              height: 32,
+              borderRadius: 8,
               background: "linear-gradient(135deg, #5B4FCF, #8B5CF6)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "white",
               fontWeight: 800,
-              fontSize: 16,
+              fontSize: 14,
             }}
           >
             IT
           </div>
-          <span style={{ fontWeight: 700, fontSize: 20, color: "#1E1B4B" }}>
+          <span style={{ fontWeight: 700, fontSize: 18, color: "#1E1B4B" }}>
             Intelli<span style={{ color: "#5B4FCF" }}>Test</span>
           </span>
         </Link>
@@ -181,11 +181,11 @@ export default function Navbar() {
         <div
           className="md:hidden"
           style={{
-            padding: "16px 24px",
+            padding: "12px 16px",
             borderTop: "1px solid rgba(0,0,0,0.06)",
             display: "flex",
             flexDirection: "column",
-            gap: 12,
+            gap: 8,
             background: "white",
           }}
         >
@@ -195,9 +195,9 @@ export default function Navbar() {
                 <div
                   style={{
                     background: "#F0EEFF",
-                    padding: "8px 14px",
+                    padding: "8px 12px",
                     borderRadius: 8,
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: 600,
                     color: "#5B4FCF",
                     textAlign: "center",
@@ -206,13 +206,13 @@ export default function Navbar() {
                   {userData.plan === "unlimited" ? "♾️ Unlimited" : `⚡ ${userData.credits} credits`}
                 </div>
               )}
-              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "8px 0" }}>
+              <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "10px 0", fontSize: 14 }}>
                 Dashboard
               </Link>
-              <Link href="/generate" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "8px 0" }}>
+              <Link href="/generate" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "10px 0", fontSize: 14 }}>
                 Generate Paper
               </Link>
-              <Link href="/pricing" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "8px 0" }}>
+              <Link href="/pricing" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "10px 0", fontSize: 14 }}>
                 Pricing
               </Link>
               <button
@@ -221,8 +221,8 @@ export default function Navbar() {
                   background: "transparent",
                   border: "1px solid #E5E7EB",
                   padding: "10px 16px",
-                  borderRadius: 10,
-                  fontSize: 14,
+                  borderRadius: 8,
+                  fontSize: 13,
                   fontWeight: 500,
                   color: "#EF4444",
                   cursor: "pointer",
@@ -234,10 +234,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/pricing" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "8px 0" }}>
+              <Link href="/pricing" onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", color: "#374151", fontWeight: 500, padding: "10px 0", fontSize: 14 }}>
                 Pricing
               </Link>
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-primary" style={{ textAlign: "center" }}>
+              <Link href="/login" onClick={() => setMenuOpen(false)} className="btn-primary" style={{ textAlign: "center", padding: "10px 16px", fontSize: 13 }}>
                 Try Free →
               </Link>
             </>

@@ -113,33 +113,33 @@ export default function LoginPage() {
           alignItems: "center",
           justifyContent: "center",
           minHeight: "calc(100vh - 64px)",
-          padding: 24,
+          padding: "20px 16px",
         }}
       >
-        <div className="card animate-slide-up" style={{ maxWidth: 440, width: "100%", padding: "40px 32px" }}>
+        <div className="card animate-slide-up" style={{ maxWidth: 440, width: "100%", padding: "32px 24px" }}>
           {/* Logo */}
-          <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
             <div
               style={{
-                width: 56,
-                height: 56,
-                borderRadius: 16,
+                width: 48,
+                height: 48,
+                borderRadius: 12,
                 background: "linear-gradient(135deg, #5B4FCF, #8B5CF6)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "white",
                 fontWeight: 800,
-                fontSize: 22,
-                margin: "0 auto 16px",
+                fontSize: 18,
+                margin: "0 auto 12px",
               }}
             >
               IT
             </div>
-            <h1 style={{ fontWeight: 700, fontSize: 24, color: "#1E1B4B", marginBottom: 8 }}>
+            <h1 style={{ fontWeight: 700, fontSize: 20, color: "#1E1B4B", marginBottom: 6 }}>
               {step === "otp" ? "Verify OTP" : "Welcome to IntelliTest"}
             </h1>
-            <p style={{ color: "#6B7280", fontSize: 14 }}>
+            <p style={{ color: "#6B7280", fontSize: 13, lineHeight: 1.5 }}>
               {step === "otp"
                 ? `We sent a 6-digit code to +91${phone.replace("+91", "")}`
                 : "Sign in to generate exam papers"}
@@ -152,12 +152,12 @@ export default function LoginPage() {
               style={{
                 background: "#FEF2F2",
                 border: "1px solid #FECACA",
-                borderRadius: 12,
-                padding: "12px 16px",
-                marginBottom: 20,
+                borderRadius: 10,
+                padding: "10px 14px",
+                marginBottom: 16,
                 color: "#DC2626",
-                fontSize: 14,
-                lineHeight: 1.5,
+                fontSize: 13,
+                lineHeight: 1.4,
               }}
             >
               {error}
@@ -173,20 +173,20 @@ export default function LoginPage() {
                 disabled={loading}
                 style={{
                   width: "100%",
-                  padding: "14px 20px",
-                  borderRadius: 12,
+                  padding: "12px 16px",
+                  borderRadius: 10,
                   border: "2px solid #E5E7EB",
                   background: "white",
                   cursor: loading ? "not-allowed" : "pointer",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 12,
-                  fontSize: 15,
+                  gap: 10,
+                  fontSize: 14,
                   fontWeight: 600,
                   color: "#374151",
                   transition: "all 0.3s ease",
-                  marginBottom: 16,
+                  marginBottom: 12,
                 }}
                 onMouseEnter={(e) => {
                   if (!loading) {
@@ -203,8 +203,8 @@ export default function LoginPage() {
                   <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span
                       style={{
-                        width: 18,
-                        height: 18,
+                        width: 16,
+                        height: 16,
                         border: "2px solid #E5E7EB",
                         borderTopColor: "#5B4FCF",
                         borderRadius: "50%",
@@ -215,7 +215,7 @@ export default function LoginPage() {
                   </span>
                 ) : (
                   <>
-                    <svg width="20" height="20" viewBox="0 0 24 24">
+                    <svg width="18" height="18" viewBox="0 0 24 24">
                       <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                         fill="#4285F4"
@@ -243,12 +243,12 @@ export default function LoginPage() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 16,
-                  margin: "20px 0",
+                  gap: 12,
+                  margin: "16px 0",
                 }}
               >
                 <div style={{ flex: 1, height: 1, background: "#E5E7EB" }} />
-                <span style={{ color: "#9CA3AF", fontSize: 13, fontWeight: 500 }}>or</span>
+                <span style={{ color: "#9CA3AF", fontSize: 12, fontWeight: 500 }}>or</span>
                 <div style={{ flex: 1, height: 1, background: "#E5E7EB" }} />
               </div>
 
@@ -257,16 +257,16 @@ export default function LoginPage() {
                 onClick={() => setStep("phone")}
                 style={{
                   width: "100%",
-                  padding: "14px 20px",
-                  borderRadius: 12,
+                  padding: "12px 16px",
+                  borderRadius: 10,
                   border: "2px solid #E5E7EB",
                   background: "white",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 10,
-                  fontSize: 15,
+                  gap: 8,
+                  fontSize: 14,
                   fontWeight: 600,
                   color: "#374151",
                   transition: "all 0.3s ease",
@@ -283,7 +283,7 @@ export default function LoginPage() {
                 📱 Continue with Phone OTP
               </button>
 
-              <p style={{ textAlign: "center", fontSize: 12, color: "#9CA3AF", marginTop: 20 }}>
+              <p style={{ textAlign: "center", fontSize: 11, color: "#9CA3AF", marginTop: 16, lineHeight: 1.4 }}>
                 By continuing, you agree to our Terms of Service.
               </p>
             </>
@@ -293,16 +293,17 @@ export default function LoginPage() {
           {step === "phone" && (
             <form onSubmit={handleSendOTP}>
               <label className="form-label">Phone Number</label>
-              <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+              <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
                 <div
                   style={{
-                    padding: "12px 14px",
+                    padding: "10px 12px",
                     border: "2px solid #E5E7EB",
-                    borderRadius: 12,
-                    fontSize: 15,
+                    borderRadius: 10,
+                    fontSize: 14,
                     color: "#374151",
                     background: "#F9FAFB",
                     fontWeight: 600,
+                    minWidth: 55,
                   }}
                 >
                   +91
@@ -316,12 +317,13 @@ export default function LoginPage() {
                   maxLength={10}
                   required
                   autoFocus
+                  style={{ fontSize: 14, padding: "10px 12px" }}
                 />
               </div>
               <button
                 type="submit"
                 className="btn-primary"
-                style={{ width: "100%", padding: 14 }}
+                style={{ width: "100%", padding: 12, fontSize: 14 }}
                 disabled={loading}
               >
                 {loading ? "Sending OTP..." : "Send OTP"}
@@ -334,13 +336,13 @@ export default function LoginPage() {
                 }}
                 style={{
                   width: "100%",
-                  marginTop: 12,
-                  padding: 12,
+                  marginTop: 10,
+                  padding: 10,
                   background: "transparent",
                   border: "none",
                   color: "#5B4FCF",
                   fontWeight: 600,
-                  fontSize: 14,
+                  fontSize: 13,
                   cursor: "pointer",
                 }}
               >
@@ -360,13 +362,13 @@ export default function LoginPage() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 maxLength={6}
-                style={{ textAlign: "center", fontSize: 24, letterSpacing: 8, marginBottom: 20 }}
+                style={{ textAlign: "center", fontSize: 20, letterSpacing: 6, marginBottom: 16, padding: "12px" }}
                 autoFocus
               />
               <button
                 type="submit"
                 className="btn-primary"
-                style={{ width: "100%", padding: 14 }}
+                style={{ width: "100%", padding: 12, fontSize: 14 }}
                 disabled={loading}
               >
                 {loading ? "Verifying..." : "Verify & Login"}
@@ -380,13 +382,13 @@ export default function LoginPage() {
                 }}
                 style={{
                   width: "100%",
-                  marginTop: 12,
-                  padding: 12,
+                  marginTop: 10,
+                  padding: 10,
                   background: "transparent",
                   border: "none",
                   color: "#5B4FCF",
                   fontWeight: 600,
-                  fontSize: 14,
+                  fontSize: 13,
                   cursor: "pointer",
                 }}
               >

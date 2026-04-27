@@ -129,24 +129,24 @@ export default function GeneratePage() {
     <div style={{ minHeight: "100vh", background: "#F8F7FF" }}>
       <Navbar />
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px" }}>
-        <h1 style={{ fontWeight: 800, fontSize: 28, color: "#1E1B4B", marginBottom: 8 }}>Generate Paper</h1>
-        <p style={{ color: "#6B7280", fontSize: 15, marginBottom: 32 }}>Fill in the details to generate an AI-powered exam paper. Each generation costs 5 credits.</p>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px" }}>
+        <h1 style={{ fontWeight: 800, fontSize: 24, color: "#1E1B4B", marginBottom: 6 }}>Generate Paper</h1>
+        <p style={{ color: "#6B7280", fontSize: 13, marginBottom: 24, lineHeight: 1.5 }}>Fill in the details to generate an AI-powered exam paper. Each generation costs 5 credits.</p>
 
         {error && (
-          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 12, padding: "12px 16px", marginBottom: 20, color: "#DC2626", fontSize: 14 }}>{error}</div>
+          <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "10px 14px", marginBottom: 16, color: "#DC2626", fontSize: 13 }}>{error}</div>
         )}
 
         {generating ? (
-          <div className="card" style={{ padding: 60 }}>
+          <div className="card" style={{ padding: 40 }}>
             <LoadingSpinner message="🤖 AI is crafting your exam paper... This may take 15-30 seconds." />
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="card" style={{ padding: 32 }}>
+          <form onSubmit={handleSubmit} className="card" style={{ padding: 24 }}>
             {/* Board */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Board *</label>
-              <select className="select-field" value={formData.board} onChange={(e) => setFormData({ ...formData, board: e.target.value, className: "" })} required>
+              <select className="select-field" value={formData.board} onChange={(e) => setFormData({ ...formData, board: e.target.value, className: "" })} required style={{ fontSize: 14, padding: "10px 12px" }}>
                 <option value="">Select Board</option>
                 {Object.entries(BOARDS).map(([key, val]) => (
                   <option key={key} value={key}>{val.label}</option>
@@ -155,9 +155,9 @@ export default function GeneratePage() {
             </div>
 
             {/* Class */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Class *</label>
-              <select className="select-field" value={formData.className} onChange={(e) => setFormData({ ...formData, className: e.target.value })} required disabled={!formData.board}>
+              <select className="select-field" value={formData.className} onChange={(e) => setFormData({ ...formData, className: e.target.value })} required disabled={!formData.board} style={{ fontSize: 14, padding: "10px 12px" }}>
                 <option value="">Select Class</option>
                 {availableClasses.map((c) => (
                   <option key={c} value={c}>{c}</option>
@@ -165,39 +165,55 @@ export default function GeneratePage() {
               </select>
             </div>
 
-            {/* Subject (hardcoded) */}
-            <div style={{ marginBottom: 20 }}>
-              <label className="form-label">Subject</label>
-              <input type="text" className="input-field" value="Mathematics" disabled style={{ background: "#F9FAFB", color: "#6B7280" }} />
-            </div>
-
             {/* Chapter */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Chapter *</label>
-              <input type="text" className="input-field" placeholder='e.g. "Algebra", "Trigonometry", "Calculus"' value={formData.chapter} onChange={(e) => setFormData({ ...formData, chapter: e.target.value })} required />
+              <input
+                type="text"
+                className="input-field"
+                placeholder="e.g., Algebra, Geometry, Calculus"
+                value={formData.chapter}
+                onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
+                required
+                style={{ fontSize: 14, padding: "10px 12px" }}
+              />
             </div>
 
             {/* Question Types */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Question Types *</label>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
                 {QUESTION_TYPES.map((type) => (
-                  <label key={type.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", borderRadius: 10, border: formData.questionTypes.includes(type.value) ? "2px solid #5B4FCF" : "2px solid #E5E7EB", background: formData.questionTypes.includes(type.value) ? "#F0EEFF" : "white", cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: 500 }}>
-                    <input type="checkbox" className="checkbox-custom" checked={formData.questionTypes.includes(type.value)} onChange={() => handleTypeToggle(type.value)} />
-                    {type.label}
-                  </label>
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => handleTypeToggle(type)}
+                    style={{
+                      padding: "10px 12px",
+                      borderRadius: 8,
+                      border: formData.questionTypes.includes(type) ? "2px solid #5B4FCF" : "2px solid #E5E7EB",
+                      background: formData.questionTypes.includes(type) ? "#5B4FCF" : "white",
+                      color: formData.questionTypes.includes(type) ? "white" : "#374151",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    {type}
+                  </button>
                 ))}
               </div>
             </div>
 
             {/* Questions per type */}
             {formData.questionTypes.length > 0 && (
-              <div style={{ marginBottom: 20 }}>
+              <div style={{ marginBottom: 16 }}>
                 <label className="form-label">Number of Questions per Type</label>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
                   {formData.questionTypes.map((type) => (
                     <div key={type}>
-                      <label style={{ fontSize: 13, color: "#6B7280", marginBottom: 4, display: "block" }}>{type}</label>
+                      <label style={{ fontSize: 12, color: "#6B7280", marginBottom: 4, display: "block" }}>{type}</label>
                       <input
                         type="number"
                         className="input-field"
@@ -206,6 +222,7 @@ export default function GeneratePage() {
                         placeholder="e.g., 3, 5, 10"
                         value={formData.questionsPerType[type] || ""}
                         onChange={(e) => setFormData({ ...formData, questionsPerType: { ...formData.questionsPerType, [type]: parseInt(e.target.value) || "" } })}
+                        style={{ fontSize: 14, padding: "10px 12px" }}
                       />
                       <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
                         {[3, 5, 10].map((num) => (
@@ -214,12 +231,12 @@ export default function GeneratePage() {
                             type="button"
                             onClick={() => setFormData({ ...formData, questionsPerType: { ...formData.questionsPerType, [type]: num } })}
                             style={{
-                              padding: "4px 10px",
+                              padding: "4px 8px",
                               borderRadius: 6,
                               border: "1px solid #E5E7EB",
                               background: formData.questionsPerType[type] === num ? "#5B4FCF" : "white",
                               color: formData.questionsPerType[type] === num ? "white" : "#6B7280",
-                              fontSize: 12,
+                              fontSize: 11,
                               fontWeight: 500,
                               cursor: "pointer",
                               transition: "all 0.2s",
@@ -246,16 +263,16 @@ export default function GeneratePage() {
             )}
 
             {/* Difficulty */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Difficulty: <span style={{ color: "#5B4FCF", fontWeight: 700 }}>{formData.difficulty}</span></label>
               <input type="range" min={0} max={2} step={1} value={diffSlider} onChange={(e) => handleDiffSlider(parseInt(e.target.value))} />
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#9CA3AF", marginTop: 4 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#9CA3AF", marginTop: 4 }}>
                 <span>Easy</span><span>Medium</span><span>Hard</span>
               </div>
             </div>
 
             {/* Total Marks */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Total Marks *</label>
               <input
                 type="number"
@@ -266,20 +283,21 @@ export default function GeneratePage() {
                 value={formData.totalMarks || ""}
                 onChange={(e) => setFormData({ ...formData, totalMarks: parseInt(e.target.value) || "" })}
                 required
+                style={{ fontSize: 14, padding: "10px 12px" }}
               />
-              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+              <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
                 {[50, 80, 100].map((marks) => (
                   <button
                     key={marks}
                     type="button"
                     onClick={() => setFormData({ ...formData, totalMarks: marks })}
                     style={{
-                      padding: "6px 12px",
-                      borderRadius: 8,
+                      padding: "5px 10px",
+                      borderRadius: 6,
                       border: "1px solid #E5E7EB",
                       background: formData.totalMarks === marks ? "#5B4FCF" : "white",
                       color: formData.totalMarks === marks ? "white" : "#6B7280",
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: 500,
                       cursor: "pointer",
                       transition: "all 0.2s",
@@ -302,9 +320,9 @@ export default function GeneratePage() {
             </div>
 
             {/* Duration */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">Time Duration *</label>
-              <select className="select-field" value={formData.duration} onChange={(e) => setFormData({ ...formData, duration: e.target.value })} required>
+              <select className="select-field" value={formData.duration} onChange={(e) => setFormData({ ...formData, duration: e.target.value })} required style={{ fontSize: 14, padding: "10px 12px" }}>
                 {DURATIONS.map((d) => (
                   <option key={d.value} value={d.value}>{d.label}</option>
                 ))}
@@ -312,19 +330,19 @@ export default function GeneratePage() {
             </div>
 
             {/* School Name */}
-            <div style={{ marginBottom: 20 }}>
+            <div style={{ marginBottom: 16 }}>
               <label className="form-label">School/Institute Name <span style={{ fontWeight: 400, color: "#9CA3AF" }}>(optional)</span></label>
-              <input type="text" className="input-field" placeholder="Shown on paper header" value={formData.schoolName} onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })} />
+              <input type="text" className="input-field" placeholder="Shown on paper header" value={formData.schoolName} onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })} style={{ fontSize: 14, padding: "10px 12px" }} />
             </div>
 
             {/* Date */}
-            <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 20 }}>
               <label className="form-label">Exam Date</label>
-              <input type="date" className="input-field" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+              <input type="date" className="input-field" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} style={{ fontSize: 14, padding: "10px 12px" }} />
             </div>
 
             {/* Submit */}
-            <button type="submit" className="btn-primary" style={{ width: "100%", padding: 16, fontSize: 16 }}>
+            <button type="submit" className="btn-primary" style={{ width: "100%", padding: 12, fontSize: 15 }}>
               ✨ Generate Paper (5 credits)
             </button>
           </form>
